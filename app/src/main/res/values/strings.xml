@@ -1,3 +1,61 @@
 <resources>
     <string name="app_name">BeerTapp</string>
+
+    <!-- Example Dummy Data for one beer-->
+    <string name="price_product">$ 25.99</string>
+    <string name="product_name">Blonde Ale</string>
+    <string name="quantity">Quantity: 1</string>
+    <string name="type_bootle">Bottle: 12 oz</string>
+    <string name="supplier_name">Supplier: Jorge Ramos</string>
+    <string name="supplier_phone">628-2345675</string>
+
+    <!-- Title for the main activity when is empty [CHAR LIMIT=20] -->
+    <string name="empty_view">Ohh, It seems you don\'t have any beer yet. Add a Beer</string>
+
+    <!-- Title for the activity to add a new beer [CHAR LIMIT=20] -->
+    <string name="editor_activity_title_new_pet">Add a Beer</string>
+
+    <!-- Label for editor menu option to save beer and leave editor [CHAR LIMIT=20] -->
+    <string name="action_save">Save</string>
+
+    <!-- Label for editor overflow menu option that deletes the current beer [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
+
+    <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
+    <string name="beer_details">Details</string>
+
+    <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
+    <string name="category_bottles">Type of Bottles</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_beer_name">Name</string>
+
+    <!-- Text hint for rpice field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_beer_price">Price</string>
+
+    <!-- Text hint for quantity field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_beer_quantity">Quantity</string>
+
+    <!-- Label for measurement information in the editor [CHAR LIMIT=30] -->
+    <string name="supplier_details">Supplier Info</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_supplier_name">Name</string>
+
+    <!-- Text hint for phone field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_supplier_phone">Phone</string>
+
+    <!-- Label for dropdown menu option if the type of bottle is unknown [CHAR LIMIT=20] -->
+    <string name="bottle_can">Cans</string>
+
+    <!-- Label for dropdown menu option if the bottle is 12oz [CHAR LIMIT=20] -->
+    <string name="bootle_12">12 oz</string>
+
+    <!-- Label for dropdown menu option if the bottle is 12oz [CHAR LIMIT=20] -->
+    <string name="bootle_16">16 oz</string>
+
+    <!-- Label for dropdown menu option if the bottle is 12oz [CHAR LIMIT=20] -->
+    <string name="bootle_22">22 oz</string>
+
+
 </resources>
