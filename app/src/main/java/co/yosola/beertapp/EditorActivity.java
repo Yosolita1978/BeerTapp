@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import co.yosola.beertapp.data.BeerContract.BeerEntry;
+
 /**
  * Allows user to create a new pet or edit an existing one.
  */
@@ -80,13 +82,13 @@ public class EditorActivity extends AppCompatActivity {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.bootle_12))) {
-                        mBottle = 1; // 12oz
+                        mBottle = BeerEntry.TYPE_BOTTLE_12; // 12oz
                     } else if (selection.equals(getString(R.string.bootle_16))) {
-                        mBottle = 2; // 16oz
+                        mBottle = BeerEntry.TYPE_BOTTLE_16; // 16oz
                     } else if (selection.equals(getString(R.string.bootle_22))) {
-                        mBottle = 3; // 22oz
+                        mBottle = BeerEntry.TYPE_BOTTLE_22; // 22oz
                     } else {
-                        mBottle = 0; // Can
+                        mBottle = BeerEntry.TYPE_BOTTLE_CAN; // Can
                     }
                 }
             }
@@ -94,7 +96,7 @@ public class EditorActivity extends AppCompatActivity {
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mBottle = 0; // Can
+                mBottle = BeerEntry.TYPE_BOTTLE_CAN; // Can
             }
         });
     }
