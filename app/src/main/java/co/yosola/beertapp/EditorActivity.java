@@ -1,5 +1,7 @@
 package co.yosola.beertapp;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +13,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import co.yosola.beertapp.data.BeerContract.BeerEntry;
+import co.yosola.beertapp.data.BeerDbHelper;
 
 /**
  * Allows user to create a new pet or edit an existing one.
@@ -115,7 +119,10 @@ public class EditorActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Do nothing for now
+                // Save pet to database
+                insertBeer();
+                // Exit activity
+                finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
@@ -130,5 +137,48 @@ public class EditorActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void insertBeer() {
+
+        //finding all the values from the editor.
+        String name = mNameProductEditText.getText().toString().trim();
+
+        Double price = 0.0;
+        try {
+            price = Double.parseDouble(mPriceEditText.getText().toString().trim());
+        } catch (NumberFormatException e) {
+        }
+        int quantity = 1;
+        try {
+            quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
+        } catch (NumberFormatException e) {
+
+        }
+        String supplierName = mNameSupplierEditText.getText().toString().trim();
+        String supplierPhone = mPhoneSupplierEditText.getText().toString().trim();
+
+        BeerDbHelper mDbHelper = new BeerDbHelper(this);
+
+        // Gets the database in write mode
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Create a ContentValues object where column names are the keys,
+        // and beer attributes from the editor are the values.
+        ContentValues values = new ContentValues();
+        values.put(BeerEntry.COLUMN_BEER_NAME, name);
+        values.put(BeerEntry.COLUMN_BEER_PRICE, price);
+        values.put(BeerEntry.COLUMN_BEER_QUANTITY, quantity);
+        values.put(BeerEntry.COLUMN_BEER_TYPE_BOTTLE, mBottle);
+        values.put(BeerEntry.COLUMN_BEER_SUPPLIER_NAME, supplierName);
+        values.put(BeerEntry.COLUMN_BEER_SUPPLIER_PHONE, supplierPhone);
+
+        long newRowId = db.insert(BeerEntry.TABLE_NAME, null, values);
+
+        if (newRowId == -1) {
+            Toast.makeText(this, "Error with saving product", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Product was successfully saved", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }
