@@ -15,14 +15,14 @@ public final class BeerContract {
 
         // Here are the columns for the beers
         public final static String _ID = BaseColumns._ID;
-        public final static String COLUMN_BEER_NAME = "name";
-        public final static String COLUMN_BEER_PRICE = "price";
-        public final static String COLUMN_BEER_QUANTITY = "quantity";
-        public final static String COLUMN_BEER_TYPE_BOTTLE = "type_bottle";
+        public final static String COLUMN_NAME = "name";
+        public final static String COLUMN_PRICE = "price";
+        public final static String COLUMN_QUANTITY = "quantity";
+        public final static String COLUMN_TYPE_BOTTLE = "bottle";
 
         // Here are the columns for the suppliers
-        public final static String COLUMN_BEER_SUPPLIER_NAME = "supplier_name";
-        public final static String COLUMN_BEER_SUPPLIER_PHONE = "supplier_phone";
+        public final static String COLUMN_SUPPLIER_NAME = "supplier_name";
+        public final static String COLUMN_SUPPLIER_PHONE = "supplier_phone";
 
         // Here are the different valus for the type of bottles
 

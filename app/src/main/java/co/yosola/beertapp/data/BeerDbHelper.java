@@ -28,12 +28,12 @@ public class BeerDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_BEER_TABLE = "CREATE TABLE " + BeerEntry.TABLE_NAME + " ("
                 + BeerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + BeerEntry.COLUMN_BEER_NAME + " TEXT NOT NULL, "
-                + BeerEntry.COLUMN_BEER_PRICE + " REAL NOT NULL, "
-                + BeerEntry.COLUMN_BEER_QUANTITY + " INTEGER NOT NULL DEFAULT 1, "
-                + BeerEntry.COLUMN_BEER_TYPE_BOTTLE + "INTEGER NOT NULL DEFAULT 0, "
-                + BeerEntry.COLUMN_BEER_SUPPLIER_NAME + " TEXT NOT NULL, "
-                + BeerEntry.COLUMN_BEER_SUPPLIER_PHONE + " TEXT);";
+                + BeerEntry.COLUMN_NAME + " TEXT NOT NULL, "
+                + BeerEntry.COLUMN_PRICE + " REAL NOT NULL, "
+                + BeerEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 1, "
+                + BeerEntry.COLUMN_TYPE_BOTTLE + " INTEGER NOT NULL DEFAULT 0, "
+                + BeerEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, "
+                + BeerEntry.COLUMN_SUPPLIER_PHONE + " TEXT);";
         db.execSQL(SQL_CREATE_BEER_TABLE);
     }
 

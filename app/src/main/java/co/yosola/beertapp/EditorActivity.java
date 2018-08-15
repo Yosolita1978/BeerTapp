@@ -130,7 +130,7 @@ public class EditorActivity extends AppCompatActivity {
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // Navigate back to parent activity (CatalogActivity)
+                // Navigate back to parent activity (MainActivity)
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
@@ -165,19 +165,19 @@ public class EditorActivity extends AppCompatActivity {
         // Create a ContentValues object where column names are the keys,
         // and beer attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(BeerEntry.COLUMN_BEER_NAME, name);
-        values.put(BeerEntry.COLUMN_BEER_PRICE, price);
-        values.put(BeerEntry.COLUMN_BEER_QUANTITY, quantity);
-        values.put(BeerEntry.COLUMN_BEER_TYPE_BOTTLE, mBottle);
-        values.put(BeerEntry.COLUMN_BEER_SUPPLIER_NAME, supplierName);
-        values.put(BeerEntry.COLUMN_BEER_SUPPLIER_PHONE, supplierPhone);
+        values.put(BeerEntry.COLUMN_NAME, name);
+        values.put(BeerEntry.COLUMN_PRICE, price);
+        values.put(BeerEntry.COLUMN_QUANTITY, quantity);
+        values.put(BeerEntry.COLUMN_TYPE_BOTTLE, mBottle);
+        values.put(BeerEntry.COLUMN_SUPPLIER_NAME, supplierName);
+        values.put(BeerEntry.COLUMN_SUPPLIER_PHONE, supplierPhone);
 
         long newRowId = db.insert(BeerEntry.TABLE_NAME, null, values);
 
         if (newRowId == -1) {
-            Toast.makeText(this, "Error with saving product", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error with saving beer", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Product was successfully saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Your beer was successfully saved", Toast.LENGTH_SHORT).show();
         }
     }
 
