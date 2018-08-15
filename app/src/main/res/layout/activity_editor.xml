@@ -39,14 +39,14 @@
             <EditText
                 android:id="@+id/edit_beer_price"
                 android:hint="@string/hint_beer_price"
-                android:inputType="textCapWords"
+                android:inputType="numberDecimal"
                 style="@style/EditorFieldStyle" />
 
             <!-- Quantity field -->
             <EditText
                 android:id="@+id/edit_beer_quantity"
                 android:hint="@string/hint_beer_quantity"
-                android:inputType="textCapWords"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
         </LinearLayout>
     </LinearLayout>
@@ -110,7 +110,7 @@
             <EditText
                 android:id="@+id/edit_supplier_phone"
                 android:hint="@string/hint_supplier_phone"
-                android:inputType="textCapWords"
+                android:inputType="phone"
                 style="@style/EditorFieldStyle" />
 
         </LinearLayout>

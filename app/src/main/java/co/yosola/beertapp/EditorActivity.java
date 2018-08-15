@@ -148,12 +148,14 @@ public class EditorActivity extends AppCompatActivity {
             price = Double.parseDouble(mPriceEditText.getText().toString().trim());
         } catch (NumberFormatException e) {
         }
+
         int quantity = 1;
         try {
             quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
         } catch (NumberFormatException e) {
 
         }
+
         String supplierName = mNameSupplierEditText.getText().toString().trim();
         String supplierPhone = mPhoneSupplierEditText.getText().toString().trim();
 

@@ -17,9 +17,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * TextView that is displayed when the list is empty
+     * TextView that is displayed when the db is empty
      */
     private TextView mEmptyStateTextView;
+
+    /** Database helper that will provide us access to the database */
+    private BeerDbHelper mDbHelper;
 
 
     @Override
@@ -37,8 +40,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        displayDatabaseInfo();
+        // To access our database, we instantiate our subclass of SQLiteOpenHelper
+        // and pass the context, which is the current activity.
+        mDbHelper = new BeerDbHelper(this);
 
+    }
+
+    /**
+     * Overrride the onStart method to display information in the screen when the editorActivity is used.
+     */
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
     }
 
     /**
@@ -46,17 +61,36 @@ public class MainActivity extends AppCompatActivity {
      * the beers database.
      */
     private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        BeerDbHelper mDbHelper = new BeerDbHelper(this);
 
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        // Perform this raw SQL query "SELECT * FROM beers"
-        // to get a Cursor that contains all rows from the beers table.
-        Cursor cursor = db.rawQuery("SELECT * FROM " + BeerEntry.TABLE_NAME, null);
-        int rowsNumber = cursor.getCount();
+        String[] project = {
+                BeerEntry._ID,
+                BeerEntry.COLUMN_NAME,
+                BeerEntry.COLUMN_PRICE,
+                BeerEntry.COLUMN_QUANTITY,
+                BeerEntry.COLUMN_TYPE_BOTTLE,
+                BeerEntry.COLUMN_SUPPLIER_NAME,
+                BeerEntry.COLUMN_SUPPLIER_PHONE
+
+        };
+
+
+        Cursor cursor = db.query(
+                BeerEntry.TABLE_NAME,
+                project,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        int rowsNumber= cursor.getCount();
+
+        TextView displayView = (TextView) findViewById(R.id.empty_view);
+
         if (rowsNumber == 0){
 
             // Find the layout for the empty views
@@ -73,10 +107,47 @@ public class MainActivity extends AppCompatActivity {
             emptyLayout.setVisibility(View.GONE);
             try {
 
-                // Display the number of rows in the Cursor (which reflects the number of rows in the
-                // beers table in the database).
-                TextView displayView = (TextView) findViewById(R.id.empty_view);
-                displayView.setText("Number of rows in brewery database  beer table: " + rowsNumber);
+                displayView.setText("The beer table contains " + rowsNumber + " beers.\n\n");
+                displayView.append(BeerEntry._ID + " - " +
+                        BeerEntry.COLUMN_NAME + " - " +
+                        BeerEntry.COLUMN_PRICE + " - " +
+                        BeerEntry.COLUMN_QUANTITY + " - " +
+                        BeerEntry.COLUMN_TYPE_BOTTLE + " - " +
+                        BeerEntry.COLUMN_SUPPLIER_NAME + " - " +
+                        BeerEntry.COLUMN_SUPPLIER_PHONE + "\n");
+
+                // Figure out the index of each column
+                int idColumnIndex = cursor.getColumnIndex(BeerEntry._ID);
+                int nameColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_NAME);
+                int priceColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_PRICE);
+                int quantityColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_QUANTITY);
+                int bottleColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_TYPE_BOTTLE);
+                int supplierNameColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_SUPPLIER_NAME);
+                int supplierPhoneColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_SUPPLIER_PHONE);
+
+                // Iterate through all the returned rows in the cursor
+                while (cursor.moveToNext()){
+
+                    // Use that index to extract the String or Int value of the word
+                    // at the current row the cursor is on.
+                    int currentID = cursor.getInt(idColumnIndex);
+                    String currentName = cursor.getString(nameColumnIndex);
+                    String currentPrice = cursor.getString(priceColumnIndex);
+                    int currentQuantity = cursor.getInt(quantityColumnIndex);
+                    int currentBottle = cursor.getInt(bottleColumnIndex);
+                    String currentSupplierName = cursor.getString(supplierNameColumnIndex);
+                    String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
+
+                    // Display the values from each column of the current row in the cursor in the TextView
+                    displayView.append(("\n" + currentID + " - " +
+                            currentName + " - " +
+                            currentPrice + " - " +
+                            currentQuantity + " - " +
+                            currentBottle + " - " +
+                            currentSupplierName + " - " +
+                            currentSupplierPhone));
+                }
+
 
             } finally {
 

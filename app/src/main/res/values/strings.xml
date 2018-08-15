@@ -15,6 +15,9 @@
     <!-- Title for the activity to add a new beer [CHAR LIMIT=20] -->
     <string name="editor_activity_title_new_pet">Add a Beer</string>
 
+    <!-- Title for the activity to add a new beer [CHAR LIMIT=20] -->
+    <string name="test_db_string">The beers table contains beers</string>
+
     <!-- Label for editor menu option to save beer and leave editor [CHAR LIMIT=20] -->
     <string name="action_save">Save</string>
 
