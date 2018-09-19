@@ -7,8 +7,12 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+
+import co.yosola.beertapp.data.BeerContract.BeerEntry;
 
 public class BeerProvider extends ContentProvider {
 
@@ -67,17 +71,17 @@ public class BeerProvider extends ContentProvider {
         switch (match) {
             case BEERS:
                 // For the BEERS code, query the beers table directly.
-                cursor = database.query(BeerContract.BeerEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(BeerEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case BEER_ID:
                 // For the BEER_ID code, extract out the ID from the URI.
-                selection = BeerContract.BeerEntry._ID + "=?";
+                selection = BeerEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
-                cursor = database.query(BeerContract.BeerEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(BeerEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -108,40 +112,40 @@ public class BeerProvider extends ContentProvider {
     private Uri insertBeer(Uri uri, ContentValues values) {
 
         // Check that the name is not null
-        String name = values.getAsString(BeerContract.BeerEntry.COLUMN_NAME);
+        String name = values.getAsString(BeerEntry.COLUMN_NAME);
         if (TextUtils.isEmpty(name)) {
             throw new IllegalArgumentException("The beer requires a name");
         }
 
         // Sanity checking.
         // If the price is provided, check that it's greater than or equal to $0
-        Integer price = values.getAsInteger(BeerContract.BeerEntry.COLUMN_PRICE);
+        Integer price = values.getAsInteger(BeerEntry.COLUMN_PRICE);
         if (price == null || price < 0) {
             throw new IllegalArgumentException("The beer requires valid price");
         }
 
         // Sanity checking.
         // check that quantity is greater than or equal to 0 beers.
-        Integer quantity = values.getAsInteger(BeerContract.BeerEntry.COLUMN_QUANTITY);
+        Integer quantity = values.getAsInteger(BeerEntry.COLUMN_QUANTITY);
         if (quantity == null || quantity < 0) {
             throw new IllegalArgumentException("The beer requires valid quantity");
         }
 
         // Sanity checking.
         // Check that the genre of the book. It is stored as an integer.
-        Integer typeofbottle = values.getAsInteger(BeerContract.BeerEntry.COLUMN_TYPE_BOTTLE);
-        if (typeofbottle == null || !BeerContract.BeerEntry.isValidBootle(typeofbottle)) {
+        Integer typeofbottle = values.getAsInteger(BeerEntry.COLUMN_TYPE_BOTTLE);
+        if (typeofbottle == null || !BeerEntry.isValidBootle(typeofbottle)) {
             throw new IllegalArgumentException("The beer requires valid type of Bootle");
         }
 
         // Check that the supplier's name is not null.
-        String nameSupplier = values.getAsString(BeerContract.BeerEntry.COLUMN_SUPPLIER_NAME);
+        String nameSupplier = values.getAsString(BeerEntry.COLUMN_SUPPLIER_NAME);
         if (TextUtils.isEmpty(nameSupplier)) {
             throw new IllegalArgumentException("The beer requires a supplier's name");
         }
 
         // Check that the supplier's phone is not null.
-        String phoneSupplier = values.getAsString(BeerContract.BeerEntry.COLUMN_SUPPLIER_PHONE);
+        String phoneSupplier = values.getAsString(BeerEntry.COLUMN_SUPPLIER_PHONE);
         if (phoneSupplier == null) {
             throw new IllegalArgumentException("The beer requires a supplier's phone");
         }
@@ -150,7 +154,7 @@ public class BeerProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Insert the new pet with the given values
-        long id = database.insert(BeerContract.BeerEntry.TABLE_NAME, null, values);
+        long id = database.insert(BeerEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
@@ -162,11 +166,100 @@ public class BeerProvider extends ContentProvider {
     }
 
     /**
-     * Updates the data at the given selection and selection arguments, with the new ContentValues.
+     * Returns the MIME type of data for the content URI.
      */
     @Override
-    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        return 0;
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BEERS:
+                return updateBeer(uri, contentValues, selection, selectionArgs);
+            case BEER_ID:
+                // For the BER_ID code, extract out the ID from the URI,
+                // so we know which row to update. Selection will be "_id=?" and selection
+                // arguments will be a String array containing the actual ID.
+                selection = BeerEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateBeer(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Update beers in the database with the given content values. Apply the changes to the rows.
+     * Return the number of rows that were successfully updated.
+     */
+    private int updateBeer(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        // If the {@link BeerEntry#COLUMN_NAME} key is present,
+        // check that the name value is not null.
+        if (values.containsKey(BeerEntry.COLUMN_NAME)) {
+            String name = values.getAsString(BeerEntry.COLUMN_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("The beer requires a name");
+            }
+        }
+
+        // If the {@link BeerEntry#COLUMN_PRICE} key is present,
+        // check that the price value is valid.
+        if (values.containsKey(BeerEntry.COLUMN_PRICE)) {
+            // Check that the price is greater than or equal to 0
+            Integer price = values.getAsInteger(BeerEntry.COLUMN_PRICE);
+            if (price == null || price < 0) {
+                throw new IllegalArgumentException("The beer requires valid price");
+            }
+        }
+
+        // If the {@link BeerEntry#COLUMN_QUANTITY} key is present,
+        // check that the quantity value is valid.
+        if (values.containsKey(BeerEntry.COLUMN_QUANTITY)) {
+            // Check that the quantity is greater than or equal to 0
+            Integer quantity = values.getAsInteger(BeerEntry.COLUMN_QUANTITY);
+            if (quantity == null || quantity < 0) {
+                throw new IllegalArgumentException("The beer requires valid quantity");
+            }
+        }
+
+        // If the {@link BeerEntry.COLUMN_TYPE_BOTTLE)} key is present,
+        // check that the type of bottle value is valide.
+        if (values.containsKey(BeerEntry.COLUMN_TYPE_BOTTLE)) {
+            Integer typeBottle = values.getAsInteger(BeerEntry.COLUMN_TYPE_BOTTLE);
+            if (typeBottle == null || !BeerEntry.isValidBootle(typeBottle)) {
+                throw new IllegalArgumentException("The beer requires valid bottle");
+            }
+        }
+
+        // If the {@link BeerEntry.COLUMN_SUPPLIER_NAME} key is present,
+        // check that the supplier's name value is not null.
+        if (values.containsKey(BeerEntry.COLUMN_SUPPLIER_NAME)) {
+            String supplier = values.getAsString(BeerEntry.COLUMN_SUPPLIER_NAME);
+            if (supplier == null) {
+                throw new IllegalArgumentException("The beer requires a supplier's name");
+            }
+        }
+
+        // If the {@link BeerEntry.COLUMN_SUPPLIER_PHONE} key is present,
+        // check that the supplier's phone value is not null.
+        if (values.containsKey(BeerEntry.COLUMN_SUPPLIER_PHONE)) {
+            String phone = values.getAsString(BeerEntry.COLUMN_SUPPLIER_PHONE);
+            if (phone == null) {
+                throw new IllegalArgumentException("The beer requires a supplier's phone");
+            }
+        }
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        // Otherwise, get writable database to update the data
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Perform the update on the database and get the number of rows affected
+        int rowsUpdated = database.update(BeerEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // Return the number of rows updated
+        return rowsUpdated;
     }
 
     /**
@@ -174,14 +267,45 @@ public class BeerProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        // Get writable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Track the number of rows that were deleted
+        int rowsDeleted;
+
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BEERS:
+                // Delete all rows that match the selection and selection args
+                rowsDeleted = database.delete(BeerEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case BEER_ID:
+                // Delete a single row given by the ID in the URI
+                selection = BeerEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(BeerEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        // Return the number of rows deleted
+        return rowsDeleted;
     }
 
     /**
-     * Returns the MIME type of data for the content URI.
+     * Insert new data into the provider with the given ContentValues.
      */
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BEERS:
+                return BeerEntry.CONTENT_LIST_TYPE;
+            case BEER_ID:
+                return BeerEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }
