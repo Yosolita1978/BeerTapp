@@ -26,6 +26,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+        <provider
+            android:name=".data.BeerProvider"
+            android:authorities="co.yosola.beertapp"
+            android:exported="false" />
     </application>
 
 </manifest>

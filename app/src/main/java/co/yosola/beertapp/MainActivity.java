@@ -62,9 +62,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void displayDatabaseInfo() {
 
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         String[] project = {
                 BeerEntry._ID,
                 BeerEntry.COLUMN_NAME,
@@ -75,17 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 BeerEntry.COLUMN_SUPPLIER_PHONE
 
         };
-
-
-        Cursor cursor = db.query(
-                BeerEntry.TABLE_NAME,
-                project,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        Cursor cursor = getContentResolver().query(BeerEntry.CONTENT_URI, project, null, null, null);
 
         int rowsNumber= cursor.getCount();
 

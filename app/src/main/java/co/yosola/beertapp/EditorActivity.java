@@ -2,6 +2,7 @@ package co.yosola.beertapp;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -149,7 +150,7 @@ public class EditorActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
         }
 
-        int quantity = 1;
+        int quantity = 0;
         try {
             quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
         } catch (NumberFormatException e) {
@@ -158,11 +159,6 @@ public class EditorActivity extends AppCompatActivity {
 
         String supplierName = mNameSupplierEditText.getText().toString().trim();
         String supplierPhone = mPhoneSupplierEditText.getText().toString().trim();
-
-        BeerDbHelper mDbHelper = new BeerDbHelper(this);
-
-        // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         // Create a ContentValues object where column names are the keys,
         // and beer attributes from the editor are the values.
@@ -174,12 +170,18 @@ public class EditorActivity extends AppCompatActivity {
         values.put(BeerEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(BeerEntry.COLUMN_SUPPLIER_PHONE, supplierPhone);
 
-        long newRowId = db.insert(BeerEntry.TABLE_NAME, null, values);
+        // Insert a new pet into the provider, returning the content URI for the new pet.
+        Uri newUri = getContentResolver().insert(BeerEntry.CONTENT_URI, values);
 
-        if (newRowId == -1) {
-            Toast.makeText(this, "Error with saving beer", Toast.LENGTH_SHORT).show();
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newUri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_beer_failed),
+                    Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Your beer was successfully saved", Toast.LENGTH_SHORT).show();
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_insert_beer_successful),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

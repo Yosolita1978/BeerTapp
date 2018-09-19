@@ -60,5 +60,12 @@
     <!-- Label for dropdown menu option if the bottle is 12oz [CHAR LIMIT=20] -->
     <string name="bootle_22">22 oz</string>
 
+    <!-- Toast message in editor when new beer has been successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_beer_successful">Your beer was successfully saved</string>
+
+    <!-- Toast message in editor when new beer has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_beer_failed">Error with saving beer</string>
+
+
 
 </resources>
