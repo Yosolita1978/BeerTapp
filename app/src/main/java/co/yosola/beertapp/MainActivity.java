@@ -1,6 +1,9 @@
 package co.yosola.beertapp;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,12 +11,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import co.yosola.beertapp.data.BeerContract.BeerEntry;
 import co.yosola.beertapp.data.BeerDbHelper;
+import co.yosola.beertapp.data.BeerProvider;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     /**
@@ -21,8 +26,15 @@ public class MainActivity extends AppCompatActivity {
      */
     private TextView mEmptyStateTextView;
 
-    /** Database helper that will provide us access to the database */
-    private BeerDbHelper mDbHelper;
+    /**
+     * Initialize value can be set as any unique integer.
+     */
+    private static final int BEER_LOADER = 0;
+
+    /**
+     * The adapter for the list view
+     */
+    BeerCursorAdapter mCursorAdapter;
 
 
     @Override
@@ -40,111 +52,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new BeerDbHelper(this);
+        // Find the ListView which will be populated with the beers
+        ListView beerListView = (ListView) findViewById(R.id.list);
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_layout);
+        beerListView.setEmptyView(emptyView);
+
+        // Setup an Adapter to create a list item for each row of beer data in the Cursor.
+        // There is no beer data yet (until the loader finishes) so pass in null for the Cursor.
+        mCursorAdapter = new BeerCursorAdapter(this, null);
+        beerListView.setAdapter(mCursorAdapter);
+
+        // Kick off the loader that loads the list items
+        getLoaderManager().initLoader(BEER_LOADER, null, this);
+
 
     }
 
-    /**
-     * Overrride the onStart method to display information in the screen when the editorActivity is used.
-     */
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the beers database.
-     */
-    private void displayDatabaseInfo() {
-
-        String[] project = {
+        // Define a projection that specifies the columns from the table.
+        // Use only the columns needed to display the list view for better performance.
+        String[] projection = {
                 BeerEntry._ID,
                 BeerEntry.COLUMN_NAME,
-                BeerEntry.COLUMN_PRICE,
-                BeerEntry.COLUMN_QUANTITY,
                 BeerEntry.COLUMN_TYPE_BOTTLE,
-                BeerEntry.COLUMN_SUPPLIER_NAME,
-                BeerEntry.COLUMN_SUPPLIER_PHONE
-
-        };
-        Cursor cursor = getContentResolver().query(BeerEntry.CONTENT_URI, project, null, null, null);
-
-        int rowsNumber= cursor.getCount();
-
-        TextView displayView = (TextView) findViewById(R.id.empty_view);
-
-        if (rowsNumber == 0){
-
-            // Find the layout for the empty views
-            View emptyLayout = (View) findViewById(R.id.empty_layout);
-            emptyLayout.setVisibility(View.VISIBLE);
-
-            mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
-            mEmptyStateTextView.setText(R.string.empty_view);
-
-        } else {
-
-            // Find the layout with the image for the empty views
-            ImageView emptyLayout = (ImageView) findViewById(R.id.empty_image);
-            emptyLayout.setVisibility(View.GONE);
-            try {
-
-                displayView.setText("The beer table contains " + rowsNumber + " beers.\n\n");
-                displayView.append(BeerEntry._ID + " - " +
-                        BeerEntry.COLUMN_NAME + " - " +
-                        BeerEntry.COLUMN_PRICE + " - " +
-                        BeerEntry.COLUMN_QUANTITY + " - " +
-                        BeerEntry.COLUMN_TYPE_BOTTLE + " - " +
-                        BeerEntry.COLUMN_SUPPLIER_NAME + " - " +
-                        BeerEntry.COLUMN_SUPPLIER_PHONE + "\n");
-
-                // Figure out the index of each column
-                int idColumnIndex = cursor.getColumnIndex(BeerEntry._ID);
-                int nameColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_NAME);
-                int priceColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_PRICE);
-                int quantityColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_QUANTITY);
-                int bottleColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_TYPE_BOTTLE);
-                int supplierNameColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_SUPPLIER_NAME);
-                int supplierPhoneColumnIndex = cursor.getColumnIndex(BeerEntry.COLUMN_SUPPLIER_PHONE);
-
-                // Iterate through all the returned rows in the cursor
-                while (cursor.moveToNext()){
-
-                    // Use that index to extract the String or Int value of the word
-                    // at the current row the cursor is on.
-                    int currentID = cursor.getInt(idColumnIndex);
-                    String currentName = cursor.getString(nameColumnIndex);
-                    String currentPrice = cursor.getString(priceColumnIndex);
-                    int currentQuantity = cursor.getInt(quantityColumnIndex);
-                    int currentBottle = cursor.getInt(bottleColumnIndex);
-                    String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                    String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
-
-                    // Display the values from each column of the current row in the cursor in the TextView
-                    displayView.append(("\n" + currentID + " - " +
-                            currentName + " - " +
-                            currentPrice + " - " +
-                            currentQuantity + " - " +
-                            currentBottle + " - " +
-                            currentSupplierName + " - " +
-                            currentSupplierPhone));
-                }
+                BeerEntry.COLUMN_PRICE,
+                BeerEntry.COLUMN_QUANTITY};
 
 
-            } finally {
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,               // Parent activity context
+                BeerEntry.CONTENT_URI,                 //Provider content URI to query
+                projection,                       // Columns to include in the resulting Cursor
+                null,                            // No selection clause
+                null,                           // No selection arguments
+                null);                          // No sort arguments
+    }
 
-                // Always close the cursor when you're done reading from it. This releases all its
-                // resources and makes it invalid.
-                cursor.close();
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursorData) {
+        // Update {@link BeerCursorAdapter} with this new cursor containing updated beer data
+        mCursorAdapter.swapCursor(cursorData);
 
-            }
+    }
 
-        }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Callback called when the data needs to be deleted
+        mCursorAdapter.swapCursor(null);
 
     }
 }

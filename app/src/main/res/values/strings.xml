@@ -66,6 +66,12 @@
     <!-- Toast message in editor when new beer has failed to be inserted [CHAR LIMIT=NONE] -->
     <string name="editor_insert_beer_failed">Error with saving beer</string>
 
+    <!-- Label for the sale button in the UI [CHAR LIMIT=20] -->
+    <string name="salebutton">Sale</string>
+
+    <!-- Label for the toast of out of stock of the beers-->
+    <string name="toast_out_of_stock">You are out of stock of this beer</string>
+
 
 
 </resources>

@@ -42,10 +42,5 @@
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
     </style>
 
-    <!-- List Item Button Style -->
-    <style name="SaleButtonStyle">
-        <item name="android:focusable">false</item>
-        <item name="android:focusableInTouchMode">false</item>
-    </style>
 
 </resources>

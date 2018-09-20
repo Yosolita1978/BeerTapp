@@ -10,10 +10,9 @@
     <!-- This layout will have the list of beers. -->
     <ListView
         android:id="@+id/list"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="1dp"/>
+        tools:listitem="@layout/list_item"/>
 
 
     <!-- Empty view is only visible when the list has no items. -->
@@ -21,7 +20,10 @@
         android:id="@+id/empty_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
         android:orientation="vertical"
         android:weightSum="2">
 
@@ -29,20 +31,8 @@
             android:id="@+id/empty_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/beers"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/empty_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:padding="@dimen/dimen_8dp"
-            android:textAlignment="center"
-            android:textAppearance="?android:textAppearanceMedium"
-            tools:text="@string/empty_view"
-            android:textColor="@color/textOnPrimary"/>
+            android:layout_gravity="center"
+            android:src="@drawable/testemptybeers" />
 
     </LinearLayout>
 
@@ -51,8 +41,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/beericon"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="96dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/beericon" />
 </RelativeLayout>
