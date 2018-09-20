@@ -16,15 +16,13 @@
 
 
     <!-- Empty view is only visible when the list has no items. -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/empty_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="25dp"
-        android:orientation="vertical"
         android:weightSum="2">
 
         <ImageView
@@ -32,9 +30,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/testemptybeers" />
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_marginRight="@dimen/dimen_8dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:padding="@dimen/dimen_8dp"
+            android:layout_marginBottom="@dimen/dimen_80dp"
+            android:paddingLeft="@dimen/dimen_8dp"
+            android:paddingStart="@dimen/dimen_8dp"
+            android:paddingTop="@dimen/dimen_8dp"
+            android:src="@drawable/emptybeerswithaction"
+            tools:paddingRight="@dimen/dimen_8dp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -43,8 +50,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="96dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginBottom="@dimen/dimen_80dp"
+        android:layout_marginEnd="@dimen/dimen_20dp"
+        android:layout_marginRight="@dimen/dimen_20dp"
         android:src="@drawable/beericon" />
 </RelativeLayout>
