@@ -72,6 +72,48 @@
     <!-- Label for the toast of out of stock of the beers-->
     <string name="toast_out_of_stock">You are out of stock of this beer</string>
 
+    <!-- Text hint for tittle in the editor [CHAR LIMIT=30] -->
+    <string name="add_new_beer">Add a Beer</string>
+
+    <!-- Text hint for tittle in the editor [CHAR LIMIT=30] -->
+    <string name="edit_beer">Edit Your Beer</string>
+
+    <!-- Toast message in editor when current beer was successfully updated [CHAR LIMIT=NONE] -->
+    <string name="editor_update_beer_successful">Beer updated</string>
+
+    <!-- Toast message in editor when current beer has failed to be updated [CHAR LIMIT=NONE] -->
+    <string name="editor_update_beer_failed">Error with updating Beer</string>
+
+    <!-- Toast message in editor when current beer was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_beer_successful">Beer deleted</string>
+
+    <!-- Toast message in editor when current beer has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_beer_failed">Error with deleting Beer</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current beer [CHAR LIMIT=NONE] -->
+    <string name="delete_dialog_msg">Delete this beer?</string>
+
+    <!-- Dialog button text for the option to confirm deleting the current beer [CHAR LIMIT=20] -->
+    <string name="delete">Delete</string>
+
+    <!-- Dialog button text for the option to cancel deletion of the current beer [CHAR LIMIT=20] -->
+    <string name="cancel">Cancel</string>
+
+    <!-- Dialog button text for the option to confirm deleting all the beers[CHAR LIMIT=20] -->
+    <string name="delete_all_beer_dialog_msg">Delete all beers?</string>
+
+    <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="discard">Discard</string>
+
+    <!-- Dialog button text for the option to keep editing the current book [CHAR LIMIT=20] -->
+    <string name="keep_editing">Keep Editing</string>
+
+
+    <string name="beer_validation">All the fields are required.</string>
+
 
 
 </resources>

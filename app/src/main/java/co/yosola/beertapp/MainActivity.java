@@ -1,14 +1,17 @@
 package co.yosola.beertapp;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -59,6 +62,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // There is no beer data yet (until the loader finishes) so pass in null for the Cursor.
         mCursorAdapter = new BeerCursorAdapter(this, null);
         beerListView.setAdapter(mCursorAdapter);
+
+        beerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //create new intent to to go to EditorActivity
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                //appending the "id" to the URI
+
+                Uri currentBeerUri = ContentUris.withAppendedId(BeerEntry.CONTENT_URI, id);
+                // set the Uri on the data field of the intent:
+                intent.setData(currentBeerUri);
+                //lunch the EditorActivity to display the data of the current beer
+                startActivity(intent);
+            }
+        });
 
         // Kick off the loader that loads the list items
         getLoaderManager().initLoader(BEER_LOADER, null, this);
