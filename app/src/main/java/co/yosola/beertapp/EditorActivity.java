@@ -134,7 +134,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 public void onClick(View view) {
                     int quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
                     if (currentBeerUri != null) {
-
                         if (quantity > 0) {
                             quantity--;
                             ContentValues values = new ContentValues();

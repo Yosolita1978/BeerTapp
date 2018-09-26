@@ -16,19 +16,18 @@ import co.yosola.beertapp.data.BeerContract.BeerEntry;
 
 public class BeerProvider extends ContentProvider {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = BeerProvider.class.getSimpleName();
-
-    /** Database helper object */
-    private BeerDbHelper mDbHelper;
-
-    /** URI matcher code for the content URI for the beers table */
+    /**
+     * URI matcher code for the content URI for the beers table
+     */
     private static final int BEERS = 100;
-
-    /** URI matcher code for the content URI for a single beer in the beers table */
+    /**
+     * URI matcher code for the content URI for a single beer in the beers table
+     */
     private static final int BEER_ID = 101;
-
-
     /**
      * UriMatcher object to match a content URI to a corresponding code.
      */
@@ -44,6 +43,11 @@ public class BeerProvider extends ContentProvider {
 
         sUriMatcher.addURI(BeerContract.CONTENT_AUTHORITY, BeerContract.PATH_BEERS + "/#", BEER_ID);
     }
+
+    /**
+     * Database helper object
+     */
+    private BeerDbHelper mDbHelper;
 
     /**
      * Initialize the provider and the database helper object.
@@ -77,7 +81,7 @@ public class BeerProvider extends ContentProvider {
             case BEER_ID:
                 // For the BEER_ID code, extract out the ID from the URI.
                 selection = BeerEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.

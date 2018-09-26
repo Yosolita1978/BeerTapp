@@ -3,6 +3,7 @@ package co.yosola.beertapp.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import co.yosola.beertapp.data.BeerContract.BeerEntry;
 
 public class BeerDbHelper extends SQLiteOpenHelper {
@@ -10,7 +11,9 @@ public class BeerDbHelper extends SQLiteOpenHelper {
     // For debugging process
     public static final String LOG_TAG = BeerDbHelper.class.getSimpleName();
 
-    /** Name of the database file */
+    /**
+     * Name of the database file
+     */
     private static final String DATABASE_NAME = "brewery.db";
 
     /**

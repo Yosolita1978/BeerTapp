@@ -72,6 +72,9 @@
     <!-- Label for the toast of out of stock of the beers-->
     <string name="toast_out_of_stock">You are out of stock of this beer</string>
 
+    <!-- Label for the toast of not negative inventory of beers-->
+    <string name="toast_no_stock">You can\'t have negative inventory of this product</string>
+
     <!-- Text hint for tittle in the editor [CHAR LIMIT=30] -->
     <string name="add_new_beer">Add a Beer</string>
 
@@ -112,7 +115,10 @@
     <string name="keep_editing">Keep Editing</string>
 
 
-    <string name="beer_validation">All the fields are required.</string>
+    <string name="beer_price_label">Price: $ </string>
+
+    <!-- Label for overflow menu option that deletes all data [CHAR LIMIT=20] -->
+    <string name="action_delete_all_entries">Delete All Beers</string>
 
 
 

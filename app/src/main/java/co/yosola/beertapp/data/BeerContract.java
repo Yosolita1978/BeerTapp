@@ -33,7 +33,9 @@ public final class BeerContract {
     public static final class BeerEntry implements BaseColumns {
 
 
-        /** The content URI to access the beer data in the provider */
+        /**
+         * The content URI to access the beer data in the provider
+         */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BEERS);
 
         /**
@@ -46,8 +48,6 @@ public final class BeerContract {
          */
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BEERS;
-
-
 
 
         public final static String TABLE_NAME = "beers";

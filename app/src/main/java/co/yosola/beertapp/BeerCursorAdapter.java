@@ -18,7 +18,9 @@ import co.yosola.beertapp.data.BeerContract;
 
 public class BeerCursorAdapter extends CursorAdapter {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = BeerCursorAdapter.class.getSimpleName();
 
     /**
@@ -30,7 +32,6 @@ public class BeerCursorAdapter extends CursorAdapter {
 
     /**
      * Makes a new blank list item view. No data is set (or bound) to the views yet.
-     *
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -45,6 +46,9 @@ public class BeerCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, final Cursor cursorData) {
         // Find saleButton
         Button saleButton = view.findViewById(R.id.sale_button);
+
+        //Label from the price of the beer
+        String labelPrice = context.getString(R.string.beer_price_label);
 
 
         // Find fields to populate in inflated template
@@ -70,16 +74,16 @@ public class BeerCursorAdapter extends CursorAdapter {
 
         // Update the TextViews with the attributes for the current book
         nameView.setText(beerName);
-        priceView.setText("Price: $ " + beerPrice);
+        priceView.setText(labelPrice + beerPrice);
         quantityView.setText(String.valueOf(beerQuantity));
 
-        if(beerBootle == 0){
+        if (beerBootle == 0) {
             bottlesView.setText(context.getString(R.string.bottle_can));
-        } else if (beerBootle == 1){
+        } else if (beerBootle == 1) {
             bottlesView.setText(context.getString(R.string.bootle_12));
-        } else if (beerBootle == 2){
+        } else if (beerBootle == 2) {
             bottlesView.setText(context.getString(R.string.bootle_16));
-        } else if (beerBootle == 3){
+        } else if (beerBootle == 3) {
             bottlesView.setText(context.getString(R.string.bootle_22));
         }
 
@@ -100,7 +104,7 @@ public class BeerCursorAdapter extends CursorAdapter {
                     context.getContentResolver().update(currentBeerUri, values, null, null);
                     swapCursor(cursorData);
                     // Check if out of stock to display toast
-                    if (beerQuantity == 1) {
+                    if (beerQuantity <= 1) {
                         Toast.makeText(context, R.string.toast_out_of_stock, Toast.LENGTH_SHORT).show();
                     }
                 }
