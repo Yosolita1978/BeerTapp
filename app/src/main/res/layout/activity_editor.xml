@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Layout for the editor -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!-- Layout for the editor -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,71 +15,72 @@
 
         <!-- Label -->
         <TextView
-            android:text="@string/beer_details"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="@string/beer_details" />
 
         <!-- Input fields -->
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:paddingLeft="4dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
 
             <!-- Name field -->
             <EditText
                 android:id="@+id/edit_beer_name"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/hint_beer_name"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
             <!-- Price field -->
             <EditText
                 android:id="@+id/edit_beer_price"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/hint_beer_price"
-                android:inputType="numberDecimal"
-                style="@style/EditorFieldStyle" />
+                android:inputType="numberDecimal" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-            <!-- Quantity field -->
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_beer_quantity"
-                android:hint="@string/hint_beer_quantity"
-                android:inputType="number"
-                android:layout_weight="1"
-                android:fontFamily="sans-serif-light"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                <!-- Quantity field -->
+                <EditText
+                    android:id="@+id/edit_beer_quantity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="@string/hint_beer_quantity"
+                    android:inputType="number"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <LinearLayout
                     android:id="@+id/buttons_quantity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-                <Button
-                    android:id="@+id/plus_button"
-                    android:background="@drawable/salebutton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="+"
-                    android:textColor="@color/textAccent"
-                    android:textSize="@dimen/font_large"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/plus_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/salebutton"
+                        android:text="+"
+                        android:textColor="@color/textAccent"
+                        android:textSize="@dimen/font_large" />
 
                     <Button
                         android:id="@+id/minus_button"
-                        android:background="@drawable/salebutton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/salebutton"
                         android:text="-"
                         android:textColor="@color/textAccent"
-                        android:textSize="@dimen/font_large"
-                        android:layout_weight="1"/>
+                        android:textSize="@dimen/font_large" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -98,23 +97,23 @@
 
         <!-- Label -->
         <TextView
-            android:text="@string/category_bottles"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="@string/category_bottles" />
 
         <!-- Input field -->
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:orientation="vertical">
 
             <!-- Bottles drop-down spinner -->
             <Spinner
                 android:id="@+id/spinner_bottles"
-                android:layout_height="48dp"
                 android:layout_width="wrap_content"
+                android:layout_height="48dp"
                 android:paddingRight="16dp"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown" />
         </LinearLayout>
     </LinearLayout>
 
@@ -126,30 +125,60 @@
 
         <!-- Label -->
         <TextView
-            android:text="@string/supplier_details"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="@string/supplier_details" />
 
         <!-- Input fields -->
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:paddingLeft="4dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
 
             <!-- Name field -->
             <EditText
                 android:id="@+id/edit_supplier_name"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/hint_supplier_name"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
-            <!-- Phone field -->
-            <EditText
-                android:id="@+id/edit_supplier_phone"
-                android:hint="@string/hint_supplier_phone"
-                android:inputType="phone"
-                style="@style/EditorFieldStyle" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+                <!-- Phone field -->
+                <EditText
+                    android:id="@+id/edit_supplier_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="@string/hint_supplier_phone"
+                    android:inputType="phone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <LinearLayout
+                    android:id="@+id/buttons_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_30dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/phone_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/salebutton"
+                        android:text="Call"
+                        android:textColor="@color/textAccent"
+                        android:textSize="@dimen/font_medium" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

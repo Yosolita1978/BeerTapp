@@ -72,6 +72,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Button mMinusQuantity;
 
     /**
+     * Button to call the supplier
+     **/
+    private Button mPhoneIntent;
+
+    /**
      * Type of the bottles for the beer. The possible values are:
      * 0 for cans, 1 for 12oz, 2 for 16oz, 3 for 22oz.
      */
@@ -102,6 +107,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mPlusQuantity = (Button) findViewById(R.id.plus_button);
         mMinusQuantity = (Button) findViewById(R.id.minus_button);
 
+        LinearLayout buttonphone = (LinearLayout) findViewById(R.id.buttons_phone);
+        mPhoneIntent = (Button) findViewById(R.id.phone_button);
+
         // examine the intent that was used to launch this activity,
         // in order to figure out if we're creating a new pat or editing a beer
         Intent intent = getIntent();
@@ -116,9 +124,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // (It doesn't make sense to delete a beer that hasn't been created yet.)
             invalidateOptionsMenu();
             buttons.setVisibility(View.GONE);
+            buttonphone.setVisibility(View.GONE);
         } else {
             setTitle(getString(R.string.edit_beer));
             buttons.setVisibility(View.VISIBLE);
+            buttonphone.setVisibility(View.VISIBLE);
             mMinusQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -144,6 +154,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         ContentValues values = new ContentValues();
                         values.put(BeerEntry.COLUMN_QUANTITY, quantity);
                         getContentResolver().update(currentBeerUri, values, null, null);
+                    }
+                }
+            });
+
+            mPhoneIntent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
+                            mPhoneSupplierEditText.getText().toString().trim(), null));
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
                     }
                 }
             });
