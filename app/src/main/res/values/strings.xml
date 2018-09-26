@@ -66,6 +66,9 @@
     <!-- Toast message in editor when new beer has failed to be inserted [CHAR LIMIT=NONE] -->
     <string name="editor_insert_beer_failed">Error with saving beer</string>
 
+    <!-- Toast message in editor when new beer has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_save_beer_failed">You can\'t save a beer with empty fields</string>
+
     <!-- Label for the sale button in the UI [CHAR LIMIT=20] -->
     <string name="salebutton">Sale</string>
 
@@ -116,6 +119,8 @@
 
 
     <string name="beer_price_label">Price: $ </string>
+
+    <string name="phone_save_failed">You must enter a valid phone numer </string>
 
     <!-- Label for overflow menu option that deletes all data [CHAR LIMIT=20] -->
     <string name="action_delete_all_entries">Delete All Beers</string>

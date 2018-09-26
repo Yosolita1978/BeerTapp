@@ -139,6 +139,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                             ContentValues values = new ContentValues();
                             values.put(BeerEntry.COLUMN_QUANTITY, quantity);
                             getContentResolver().update(currentBeerUri, values, null, null);
+                        }else {
+                            //Quantity is zero and can not be reduced further so alert user with message
+                            Toast.makeText(getApplicationContext(), getString(R.string.toast_no_stock),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -265,8 +269,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case R.id.action_save:
                 //check if the beer is valid and insert the beer to database
                  saveBeer();
-                 //Exit activity and return to the CatalogActivity
-                finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
@@ -312,73 +314,107 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String supplierString = mNameSupplierEditText.getText().toString().trim();
         String phoneNumberOfSupplierString = mPhoneSupplierEditText.getText().toString().trim();
 
-        // Check if this is supposed to be a new beer
-        // and check if all the fields in the editor are blank
-        if (currentBeerUri == null && TextUtils.isEmpty(nameString)
-                && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString)
-                && TextUtils.isEmpty(supplierString) && TextUtils.isEmpty(phoneNumberOfSupplierString)){
+        if (currentBeerUri == null &&
+                (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
+                        TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(supplierString) ||
+                        TextUtils.isEmpty(phoneNumberOfSupplierString))) {
+
             // Since no fields were modified, we can return early without creating a new beer.
+            Toast.makeText(this, getString(R.string.editor_save_beer_failed),
+                    Toast.LENGTH_SHORT).show();
+
+            getApplicationContext();
+            Intent emptyI = new Intent(getApplicationContext(), EditorActivity.class);
+            startActivity(emptyI);
             return;
+
         }
 
-        ContentValues values = new ContentValues();
+        //Validation for existing Inventory item but values must be not null
+        if (currentBeerUri != null && TextUtils.isEmpty(nameString) ||
+                TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(quantityString) ||
+                TextUtils.isEmpty(supplierString) ||
+                TextUtils.isEmpty(phoneNumberOfSupplierString)) {
 
-        values.put(BeerEntry.COLUMN_NAME, nameString);
-        values.put(BeerEntry.COLUMN_TYPE_BOTTLE, mBottle);
+            // Since value(s) are null prompt toast
+            Toast.makeText(this, getString(R.string.editor_save_beer_failed),
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(getIntent());
+            return;
 
-        // If the price is not provided by the user, don't try to parse the string into an
-        // integer value. Use 0 by default.
-        Double price = 0.0;
-        if (!TextUtils.isEmpty(priceString)) {
-            try {
-                price = Double.parseDouble(priceString);
-            } catch (NumberFormatException e) {
-            }
-        }
-        values.put(BeerEntry.COLUMN_PRICE, price);
-
-        // If the quantity is not provided by the user, don't try to parse the string into an
-        // integer value. Use 0 by default.
-        int quantity = 0;
-        if (!TextUtils.isEmpty(quantityString)) {
-            quantity = Integer.parseInt(quantityString);
         }
 
-        values.put(BeerEntry.COLUMN_QUANTITY, quantity);
-        values.put(BeerEntry.COLUMN_SUPPLIER_NAME, supplierString);
-        values.put(BeerEntry.COLUMN_SUPPLIER_PHONE, phoneNumberOfSupplierString);
-
-        // Determine if this is a new or existing beer by checking if CurrentBeerURI is null or not
-        if (currentBeerUri == null) {
-
-            Uri newUri = getContentResolver().insert(BeerEntry.CONTENT_URI, values);
-
-            // Show a toast message depending on whether or not the insertion was successful
-            if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_beer_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_insert_beer_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
-
+        //Validate phone entry can be null but if not empty must have 10 numbers
+        if (!TextUtils.isEmpty(phoneNumberOfSupplierString) && (phoneNumberOfSupplierString.length() != 10)) {
+            Toast.makeText(this, getString(R.string.phone_save_failed),
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(getIntent());
         } else {
-            // Otherwise this is an EXISTING beer, so update the book with content URI:
 
-            int rowsAffected = getContentResolver().update(currentBeerUri, values, null, null);
+            ContentValues values = new ContentValues();
 
-            // Show a toast message depending on whether or not the update was successful.
-            if (rowsAffected == 0) {
-                // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.editor_update_beer_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_update_beer_successful),
-                        Toast.LENGTH_SHORT).show();
+            values.put(BeerEntry.COLUMN_NAME, nameString);
+            values.put(BeerEntry.COLUMN_TYPE_BOTTLE, mBottle);
+
+            // If the price is not provided by the user, don't try to parse the string into an
+            // integer value. Use 0 by default.
+            Double price = 0.0;
+            if (!TextUtils.isEmpty(priceString)) {
+                try {
+                    price = Double.parseDouble(priceString);
+                } catch (NumberFormatException e) {
+                }
             }
+            values.put(BeerEntry.COLUMN_PRICE, price);
+
+            // If the quantity is not provided by the user, don't try to parse the string into an
+            // integer value. Use 0 by default.
+            int quantity = 0;
+            if (!TextUtils.isEmpty(quantityString)) {
+                quantity = Integer.parseInt(quantityString);
+            }
+
+            values.put(BeerEntry.COLUMN_QUANTITY, quantity);
+            values.put(BeerEntry.COLUMN_SUPPLIER_NAME, supplierString);
+            values.put(BeerEntry.COLUMN_SUPPLIER_PHONE, phoneNumberOfSupplierString);
+
+            // Determine if this is a new or existing beer by checking if CurrentBeerURI is null or not
+            if (currentBeerUri == null) {
+
+                Uri newUri = getContentResolver().insert(BeerEntry.CONTENT_URI, values);
+
+                // Show a toast message depending on whether or not the insertion was successful
+                if (newUri == null) {
+                    // If the new content URI is null, then there was an error with insertion.
+                    Toast.makeText(this, getString(R.string.editor_insert_beer_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the insertion was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.editor_insert_beer_successful),
+                            Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+                // Otherwise this is an EXISTING beer, so update the book with content URI:
+
+                int rowsAffected = getContentResolver().update(currentBeerUri, values, null, null);
+
+                // Show a toast message depending on whether or not the update was successful.
+                if (rowsAffected == 0) {
+                    // If no rows were affected, then there was an error with the update.
+                    Toast.makeText(this, getString(R.string.editor_update_beer_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the update was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.editor_update_beer_successful),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+            //Exit activity and return to the CatalogActivity
+            finish();
         }
     }
 
@@ -510,10 +546,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             rowsDeleted = getContentResolver().delete(currentBeerUri, null, null);
             Log.v("DeleteBeer", String.valueOf(rowsDeleted));
 
-
             // Show a toast message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {
-                Log.v("DeleteBeer", rowsDeleted + " rows deleted from beers database");
 
                 // If no rows were deleted, then there was an error with the delete.
                 Toast.makeText(this, getString(R.string.editor_delete_beer_failed),
