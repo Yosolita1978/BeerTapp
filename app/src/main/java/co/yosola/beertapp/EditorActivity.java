@@ -314,6 +314,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String supplierString = mNameSupplierEditText.getText().toString().trim();
         String phoneNumberOfSupplierString = mPhoneSupplierEditText.getText().toString().trim();
 
+        //Validation for NO-existing Inventory item and with all the values null
         if (currentBeerUri == null &&
                 (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
                         TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(supplierString) ||
@@ -322,10 +323,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Since no fields were modified, we can return early without creating a new beer.
             Toast.makeText(this, getString(R.string.editor_save_beer_failed),
                     Toast.LENGTH_SHORT).show();
-
-            getApplicationContext();
-            Intent emptyI = new Intent(getApplicationContext(), EditorActivity.class);
-            startActivity(emptyI);
             return;
 
         }
@@ -340,8 +337,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Since value(s) are null prompt toast
             Toast.makeText(this, getString(R.string.editor_save_beer_failed),
                     Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(getIntent());
             return;
 
         }
@@ -350,8 +345,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (!TextUtils.isEmpty(phoneNumberOfSupplierString) && (phoneNumberOfSupplierString.length() != 10)) {
             Toast.makeText(this, getString(R.string.phone_save_failed),
                     Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(getIntent());
         } else {
 
             ContentValues values = new ContentValues();
